@@ -1,13 +1,13 @@
 global:
-  scrape_interval: 5s # By default, scrape targets every 5 second.
-  scrape_timeout: 4s # Timeout before trying to scape a target again
+  scrape_interval: 15s # By default, scrape targets every 5 second.
+  scrape_timeout: 15s # Timeout before trying to scape a target again
 
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
     monitor: 'scylla-monitor'
 rule_files:
-  - /etc/prometheus/prometheus.rules
+  - /etc/prometheus/prometheus.rules.yml
     #
 # Alerting specifies settings related to the Alertmanager.
 alerting:
@@ -36,3 +36,10 @@ scrape_configs:
   file_sd_configs:
     - files:
       - /etc/scylla.d/prometheus/scylla_manager_servers.yml
+
+- job_name: 'prometheus'
+  # Override the global default and scrape targets from this job every 5 seconds.
+  scrape_interval: 5s
+  static_configs:
+    - targets: 
+      - localhost:9090
